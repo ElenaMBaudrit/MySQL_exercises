@@ -1,0 +1,153 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema Blogs
+-- -----------------------------------------------------
+-- Coding Dojo's MySQL's ERD lessons.
+
+-- -----------------------------------------------------
+-- Schema Blogs
+--
+-- Coding Dojo's MySQL's ERD lessons.
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `Blogs` ;
+USE `Blogs` ;
+
+-- -----------------------------------------------------
+-- Table `Blogs`.`blogs`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Blogs`.`blogs` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `blog_name` VARCHAR(255) NULL,
+  `post` INT NULL,
+  `created_at` DATETIME NULL,
+  `updated_at` DATETIME NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Blogs`.`users`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Blogs`.`users` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `first_name` INT NULL,
+  `last_name` INT NULL,
+  `created_at` DATETIME NULL,
+  `updated_at` DATETIME NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Blogs`.`posts`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Blogs`.`posts` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `edit_post` MEDIUMTEXT NULL,
+  `add_post` LONGTEXT NULL,
+  `comment` INT NULL,
+  `created_at` DATETIME NULL,
+  `updated_at` DATETIME NULL,
+  `blog_file` INT NOT NULL,
+  `blog_id` INT NOT NULL,
+  `user_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_posts_blogs1_idx` (`blog_id` ASC),
+  INDEX `fk_posts_users1_idx` (`user_id` ASC),
+  CONSTRAINT `fk_posts_blogs1`
+    FOREIGN KEY (`blog_id`)
+    REFERENCES `Blogs`.`blogs` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_posts_users1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `Blogs`.`users` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Blogs`.`comments`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Blogs`.`comments` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `add_comment` INT NULL,
+  `edit_comment` INT NULL,
+  `created_at` DATETIME NULL,
+  `updated_at` DATETIME NULL,
+  `post_id` INT NOT NULL,
+  `user_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_comments_posts1_idx` (`post_id` ASC),
+  INDEX `fk_comments_users1_idx` (`user_id` ASC),
+  CONSTRAINT `fk_comments_posts1`
+    FOREIGN KEY (`post_id`)
+    REFERENCES `Blogs`.`posts` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_comments_users1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `Blogs`.`users` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Blogs`.`blog_files`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Blogs`.`blog_files` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `blog_files` VARCHAR(45) NULL,
+  `post_id` INT NOT NULL,
+  `user_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_blog_files_posts1_idx` (`post_id` ASC),
+  INDEX `fk_blog_files_users1_idx` (`user_id` ASC),
+  CONSTRAINT `fk_blog_files_posts1`
+    FOREIGN KEY (`post_id`)
+    REFERENCES `Blogs`.`posts` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_blog_files_users1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `Blogs`.`users` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Blogs`.`blogs_has_users`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Blogs`.`blogs_has_users` (
+  `blog_id` INT NOT NULL,
+  `user_id` INT NOT NULL,
+  PRIMARY KEY (`blog_id`, `user_id`),
+  INDEX `fk_blogs_has_users_users1_idx` (`user_id` ASC),
+  INDEX `fk_blogs_has_users_blogs1_idx` (`blog_id` ASC),
+  CONSTRAINT `fk_blogs_has_users_blogs1`
+    FOREIGN KEY (`blog_id`)
+    REFERENCES `Blogs`.`blogs` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_blogs_has_users_users1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `Blogs`.`users` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

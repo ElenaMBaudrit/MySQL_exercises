@@ -1,0 +1,9 @@
+(flaskEnv) C:\Users\baudrite\Desktop\DojoAssignments\Python\Flask_MySQL\MyDB-SQL-Flask> python server.py
+Traceback (most recent call last):
+  File "server.py", line 3, in <module>
+    from mysqlconnection import MySQLConnector
+  File "C:\Users\baudrite\Desktop\DojoAssignments\Python\Flask_MySQL\MyDB-SQL-Flask\mysqlconnection.py", line 2, in <module>
+    from flask_sqlalchemy import SQLAlchemy
+ImportError: No module named flask_sqlalchemy
+
+## Module not imported ##
